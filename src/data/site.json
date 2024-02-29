@@ -1,7 +1,7 @@
 {
-    "title": "Rocky Moon",
-    "url": "https://pereidanet.me/",
-    "description": "Contrata a Alain Pereida para crear tu aplicación web o móvil. Desarrollador Web. Especializado en crear aplicaciones únicas.",
+    "title": "Rocky Moon ml5",
+    "url": "https://ml5-web.vercel.app/",
+    "description": "Página web para mostrar los proyectos que tengo con ml5",
     "image": {
         "src": "/img/alain.png",
         "alt": "Alain Pereida Prado"
