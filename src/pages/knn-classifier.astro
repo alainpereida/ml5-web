@@ -1,0 +1,58 @@
+---
+import Layout from "../layouts/Layout.astro";
+---
+
+<Layout title="Descubre">
+  <main class="w-full flex justify-center">
+    <div class="text-center">
+      <h1 class="text-4xl text-neutral-800 pb-9">¡Descubre!</h1>
+      <video id="video-container" width="640" height="480" autoplay></video>
+      <div>
+        <p id="result" class="text-2xl"></p>
+        <button class="bg-black text-white px-4 py-2 rounded-md mt-4">
+          Clasificar
+        </button>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  const clasificadorKnn = ml5.KNNClassifier();
+  let video = document.getElementById("video-container");
+  let featureExtractor;
+
+  console.log("ml5 version:", ml5.version);
+
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    alert("Tu navegador no soporta la API de getUserMedia.");
+  } else {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: true,
+    });
+    video.srcObject = stream;
+    video.play();
+    setup();
+  }
+
+  function setup() {
+    featureExtractor = ml5.featureExtractor("MobileNet", () => {
+      console.log("MobileNet cargado");
+      clasificadorKnn.load("/model.json", () => {
+        console.log("Modelo cargado");
+      });
+    });
+  }
+
+  document.querySelector("button").addEventListener("click", () => {
+    const features = featureExtractor.infer(video);
+    clasificadorKnn.classify(features, (error, result) => {
+      if (error) {
+        console.error(error);
+      } else {
+        console.log(result);
+        document.getElementById("result").innerText = result.label;
+      }
+    });
+  });
+</script>
